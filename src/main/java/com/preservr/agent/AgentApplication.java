@@ -8,7 +8,7 @@ public class AgentApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AgentApplication.class, args);
-		System.out.println("hello from Spring Boot");
+		System.out.println("Testing");
 	}
 
 }
