@@ -1,11 +1,8 @@
 package com.preservr.agent.controller;
 
-import com.preservr.agent.entity.Process;
 import com.preservr.agent.service.ProcessService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 public class ProcessController {
@@ -16,14 +13,9 @@ public class ProcessController {
         this.processService = processService;
     }
 
-    @GetMapping("/process/all")
-    public List<Process> getProcessInformation(){
-        return processService.getAllProcesses();
-    }
-
-    @GetMapping("/process/user")
-    public List<Process> getUserProcesses(){
-        return processService.getUserProcesses();
+    @GetMapping("/process/top")
+    public void runTopCommand() {
+        processService.topByCPUUsage();
     }
 
 
