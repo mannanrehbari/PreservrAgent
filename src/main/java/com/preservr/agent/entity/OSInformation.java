@@ -6,7 +6,7 @@ import lombok.*;
 @Getter @Setter
 @AllArgsConstructor
 @ToString
-public class OSInfo {
+public class OSInformation {
     private String osArch;
     private String osName;
     private Integer availableProcessors;

@@ -1,6 +1,6 @@
 package com.preservr.agent.controller;
 
-import com.preservr.agent.entity.OSInfo;
+import com.preservr.agent.entity.OSInformation;
 import com.preservr.agent.service.OSService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +15,7 @@ public class OSController {
     }
 
     @GetMapping("/system/info")
-    public OSInfo getSystemInformation() {
+    public OSInformation getSystemInformation() {
         return osService.getPlatformInformation();
     }
 
