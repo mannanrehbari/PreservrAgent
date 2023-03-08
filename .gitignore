@@ -31,3 +31,4 @@ build/
 java/build/**
 
 *.txt
+sse-response.json

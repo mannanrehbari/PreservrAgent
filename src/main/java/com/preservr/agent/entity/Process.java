@@ -14,7 +14,7 @@ public class Process {
 
     private String pid;
     private String command;
-    private Long cpuPercent;
+    private String cpuPercent;
     private String cpuTime;
     private String memory;
     private String ppid;

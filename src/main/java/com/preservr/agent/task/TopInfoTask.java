@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 public class TopInfoTask implements Runnable{
 
-    public static Snapshot snapshot;
+    public static Snapshot SNAPSHOT = new Snapshot();
     private ProcessService processService;
 
     @Autowired
@@ -33,17 +33,18 @@ public class TopInfoTask implements Runnable{
                     new InputStreamReader(process.getInputStream()));
             String line;
             int lineCount = 0;
+            boolean firstRun = true;
             List<String> snapshotLines = new ArrayList<>();
             while ((line = bufferedReader.readLine()) != null) {
                 lineCount++;
-//                System.out.println( lineCount + " " + line);
                 snapshotLines.add(line);
                 if(lineCount%42==0) {
-                    //process the snapshot strings
-                    snapshot = processService.mapLinesToSnapshot(snapshotLines);
-                    // clear the list
+                    if(!firstRun) {
+                        SNAPSHOT = processService.mapLinesToSnapshot(snapshotLines);
+                    }
                     snapshotLines.clear();
                     lineCount =0;
+                    firstRun = false;
                 }
             }
 
