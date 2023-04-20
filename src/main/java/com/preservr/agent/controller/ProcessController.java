@@ -1,8 +1,11 @@
 package com.preservr.agent.controller;
 
+import com.preservr.agent.entity.TerminationResponse;
 import com.preservr.agent.service.ProcessService;
 import com.preservr.agent.task.TopInfoTask;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -37,6 +40,15 @@ public class ProcessController {
             }
         });
         return sseEmitter;
+    }
+
+    @GetMapping("/process/terminate/{pid}")
+    public ResponseEntity<TerminationResponse> terminateProcessByPid(@PathVariable String pid) {
+        String terminationStatus = processService.terminateProcessByPid(pid);
+        boolean success = terminationStatus.equals(ProcessService.PROCESS_TERMINATED);
+        TerminationResponse response = new TerminationResponse(success, terminationStatus);
+        return ResponseEntity.ok(response);
+//        return processService.terminateProcessByPid(pid);
     }
 
 }

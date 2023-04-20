@@ -5,14 +5,48 @@ import com.preservr.agent.entity.Snapshot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
 public class ProcessService {
+
+    private static String PROCESS_USER_ERROR = "PROCESS NOT INITIATED BY USER";
+    public static String PROCESS_TERMINATED = "PROCESS TERMINATED";
+    private static String PROCESS_TERMINATION_ERROR = "ERROR TERMINATING PROCESS";
+    private static String PROCESS_NOT_FOUND = "PROCESS NOT FOUND";
+
+    public String terminateProcessByPid(String pid) {
+        long pidL = Long.parseLong(pid);
+        Optional<ProcessHandle> processHandleOptional = ProcessHandle.of(pidL);
+        if(processHandleOptional.isPresent()) {
+            ProcessHandle processHandle = processHandleOptional.get();
+
+            // check if it is a userprocess
+            String osUsername = System.getProperty("user.name");
+            String processUsername = processHandle.info().user().get();
+            if(!osUsername.equals(processUsername)) {
+                log.error("Process not initiated by the user. ");
+                return PROCESS_USER_ERROR;
+            }
+            boolean isTerminated = processHandle.destroy();
+            if(!isTerminated) {
+                isTerminated = processHandle.destroyForcibly();
+            }
+            if(isTerminated) {
+                log.info("Process with PID " + pidL + " terminated!");
+                return PROCESS_TERMINATED;
+            } else {
+                log.warn("Error terminating process with PID " + pidL);
+                return PROCESS_TERMINATION_ERROR;
+            }
+        } else {
+            log.error("Process with pid - " + pidL + " not found." );
+            return PROCESS_NOT_FOUND;
+        }
+    }
+
+
 
     public Snapshot mapLinesToSnapshot(List<String> topSnapshot) {
         Snapshot snapshot = new Snapshot();
